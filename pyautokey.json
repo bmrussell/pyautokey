@@ -1,0 +1,13 @@
+{
+    "config": {
+        "macro_start": ":",
+        "macro_end": "Key.space"
+    },
+    "replacements": 
+        {
+            "foo": "Firstname Lastname",
+            "bar": "abc@def.com",
+            "jingo": "One<tab><tab>Two<Enter>Three<HOME><up>",
+            "halp": "really<f1>"
+        }    
+}
