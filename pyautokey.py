@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import sys
 
 import icoextract
 import pyautogui
@@ -130,10 +131,12 @@ if __name__ == '__main__':
         config_file = appdata_config
 
     # Read the config
-    with open(config_file, 'r', encoding='utf-8') as json_file:
-        config_json = json.load(json_file)
-
-        
+    try:
+        with open(config_file, 'r', encoding='utf-8') as json_file:
+            config_json = json.load(json_file)
+    except:
+        print("Could not open config file.")       
+        sys.exit(0)
 
     macro_start = config_json['config']['macro_start']
     macro_end = config_json['config']['macro_end']
@@ -152,4 +155,4 @@ if __name__ == '__main__':
     
     # Cleanup
     systray.shutdown()
-    exit(0)
+    sys.exit(0)

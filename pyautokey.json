@@ -5,7 +5,7 @@
     },
     "replacements": 
         {
-            "hello": "kenobi<enter>",
+            "shebang": "#!/usr/bin/env bash",
             "cross": "❌ ",
             "shruggie": "¯\\_(ツ)_/¯ ",
             "tick": "✔ ",
