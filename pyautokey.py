@@ -2,7 +2,9 @@ import json
 import os
 import re
 
+import icoextract
 import pyautogui
+from infi.systray import SysTrayIcon
 from pynput import keyboard
 from pynput.keyboard import Key, Listener
 
@@ -25,6 +27,13 @@ hotkeys = ['\t', '\n', '\r',
            'up', 'volumedown', 'volumemute', 'volumeup', 'win', 'winleft', 'winright', 'yen',
            'command', 'option', 'optionleft', 'optionright']
 
+
+def quit(tray):
+    global quit_selected
+    global listener
+    
+    quit_selected = True
+    listener.stop()
 
 def on_press(key):
     global typed_keys
@@ -89,26 +98,42 @@ def prep_replacements(replacements):
             replacements[key] = replacement_array
     
 
-appdata_config = os.path.join(
-    os.getenv('APPDATA'), 'pyautokey', 'pyautokey.json')
-if os.path.exists('pyautokey.json'):
-    config_file = 'pyautokey.json'
-elif os.path.exists(appdata_config):
-    config_file = appdata_config
+if __name__ == '__main__':
+    
+    global systray
+    global quit_selected
+    global listener
+    
+    appdata_config = os.path.join(
+        os.getenv('APPDATA'), 'pyautokey', 'pyautokey.json')
+    if os.path.exists('pyautokey.json'):
+        config_file = 'pyautokey.json'
+    elif os.path.exists(appdata_config):
+        config_file = appdata_config
 
 
-with open(config_file) as json_file:
-    config_json = json.load(json_file)
+    with open(config_file) as json_file:
+        config_json = json.load(json_file)
 
-macro_start = config_json['config']['macro_start']
-macro_end = config_json['config']['macro_end']
-replacements = config_json['replacements']
-prep_replacements(replacements)
+    macro_start = config_json['config']['macro_start']
+    macro_end = config_json['config']['macro_end']
+    replacements = config_json['replacements']
+    prep_replacements(replacements)
 
-listening = True
-typed_keys = []
+    listening = True
+    typed_keys = []
 
-with Listener(on_press=on_press) as listener:
-    listener.join()
+    datadir = f'{os.getenv("APPDATA")}\\pyautokey'
+    if not os.path.exists(datadir):
+        os.makedirs(datadir)
+    extractor = icoextract.IconExtractor('C:\\Windows\\SystemResources\\imageres.dll.mun')
+    iconfile = f'{datadir}\\pyautokey.ico'    
+    extractor.export_icon(iconfile, 173)
+    systray = SysTrayIcon(iconfile, "...", menu_options=[], on_quit=quit)
+    systray.start()
 
-pass
+    with Listener(on_press=on_press) as listener:
+        listener.join()
+        
+    systray.shutdown()
+    exit(0)
