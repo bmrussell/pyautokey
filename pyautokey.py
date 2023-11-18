@@ -104,14 +104,24 @@ if __name__ == '__main__':
     global quit_selected
     global listener
     
-    appdata_config = os.path.join(
-        os.getenv('APPDATA'), 'pyautokey', 'pyautokey.json')
+    # Initialise
+    datadir = os.path.join(os.getenv('APPDATA'), 'pyautokey')
+    
+    if not os.path.exists(datadir):
+        os.makedirs(datadir)
+
+    # Get the app icon from Windows     
+    extractor = icoextract.IconExtractor('C:\\Windows\\SystemResources\\imageres.dll.mun')
+    iconfile = f'{datadir}\\pyautokey.ico'    
+    extractor.export_icon(iconfile, 173)
+    
+    appdata_config = os.path.join(datadir, 'pyautokey.json')
     if os.path.exists('pyautokey.json'):
         config_file = 'pyautokey.json'
     elif os.path.exists(appdata_config):
         config_file = appdata_config
 
-
+    # Read the config
     with open(config_file) as json_file:
         config_json = json.load(json_file)
 
@@ -119,21 +129,17 @@ if __name__ == '__main__':
     macro_end = config_json['config']['macro_end']
     replacements = config_json['replacements']
     prep_replacements(replacements)
-
-    listening = True
-    typed_keys = []
-
-    datadir = f'{os.getenv("APPDATA")}\\pyautokey'
-    if not os.path.exists(datadir):
-        os.makedirs(datadir)
-    extractor = icoextract.IconExtractor('C:\\Windows\\SystemResources\\imageres.dll.mun')
-    iconfile = f'{datadir}\\pyautokey.ico'    
-    extractor.export_icon(iconfile, 173)
+    
+    # Initialise system tray
     systray = SysTrayIcon(iconfile, "...", menu_options=[], on_quit=quit)
     systray.start()
 
+    # Start the listener: blocking. Use .start() for non blocking
+    listening = True
+    typed_keys = []
     with Listener(on_press=on_press) as listener:
         listener.join()
-        
+    
+    # Cleanup
     systray.shutdown()
     exit(0)
