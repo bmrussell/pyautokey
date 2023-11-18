@@ -5,9 +5,21 @@
     },
     "replacements": 
         {
-            "foo": "Firstname Lastname",
-            "bar": "abc@def.com",
-            "jingo": "One<tab><tab>Two<Enter>Three<HOME><up>",
-            "halp": "really<f1>"
+            "hello": "kenobi<enter>",
+            "cross": "❌ ",
+            "shruggie": "¯\\_(ツ)_/¯ ",
+            "tick": "✔ ",
+            "look": "👀 ",
+            "note": "🎵 ",
+            "run": "🏃‍️ ",
+            "fire": "🔥 ",
+            "clock": "🕙 ",
+            "email": "📧 ",
+            "para": "§ ",
+            "facepalm": "(－‸ლ)",
+            "cube": "³",
+            "square": "²"
         }    
 }
+
+ 

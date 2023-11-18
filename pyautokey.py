@@ -4,6 +4,7 @@ import re
 
 import icoextract
 import pyautogui
+import pyperclip
 from infi.systray import SysTrayIcon
 from pynput import keyboard
 from pynput.keyboard import Key, Listener
@@ -56,13 +57,20 @@ def on_press(key):
                     pyautogui.press('backspace', presses=len(candidate_keyword)+2)
                     for fragment in replacements[candidate_keyword]:
                         try:
-                            special = keyboard.HotKey.parse(fragment)
-                            special = fragment[1:-1]
+                            special = keyboard.HotKey.parse(fragment)                            
+                            if fragment[0] != '<':
+                                # Not a special sequence like <enter>
+                                # Pynput parses an extended character as-is OK
+                                special = None
+                            else:
+                                # Not a special character
+                                special = fragment[1:-1]
                         except:
                             special = None
                             
                         if special == None:
-                            pyautogui.typewrite(fragment)
+                            pyperclip.copy(fragment)
+                            pyautogui.hotkey("ctrl", "v")
                             print(fragment, end='')
                         else:
                             pyautogui.hotkey(special)
@@ -122,8 +130,10 @@ if __name__ == '__main__':
         config_file = appdata_config
 
     # Read the config
-    with open(config_file) as json_file:
+    with open(config_file, 'r', encoding='utf-8') as json_file:
         config_json = json.load(json_file)
+
+        
 
     macro_start = config_json['config']['macro_start']
     macro_end = config_json['config']['macro_end']
