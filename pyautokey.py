@@ -1,3 +1,4 @@
+import builtins
 import json
 import os
 import re
@@ -9,6 +10,8 @@ import pyperclip
 from infi.systray import SysTrayIcon
 from pynput import keyboard
 from pynput.keyboard import Key, Listener
+
+from pluginframework import factory, loader
 
 hotkeys = ['\t', '\n', '\r', 
            'accept', 'add', 'alt', 'altleft', 'altright', 'apps', 'backspace',
@@ -112,6 +115,7 @@ if __name__ == '__main__':
     global systray
     global quit_selected
     global listener
+    global plugins
     
     # Initialise
     datadir = os.path.join(os.getenv('APPDATA'), 'pyautokey')
@@ -138,10 +142,17 @@ if __name__ == '__main__':
         print("Could not open config file.")       
         sys.exit(0)
 
+    # Load text replacements
     macro_start = config_json['config']['macro_start']
     macro_end = config_json['config']['macro_end']
     replacements = config_json['replacements']
     prep_replacements(replacements)
+    
+    # Load Plugins
+    loader.load_plugins(config_json['plugins'])
+    
+    # Load the actions that do something with those plugins
+    actions = [factory.create(item) for item in config_json['actions']]
     
     # Initialise system tray
     systray = SysTrayIcon(iconfile, "...", menu_options=[], on_quit=quit)
