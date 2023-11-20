@@ -27,12 +27,12 @@
         {
             "type": "plug_date",            
             "trigger": "replacement",
-            "match": "<date>"
+            "shortmatch": "<date>"
         },
         {
             "type": "plug_time",
             "trigger": "replacement",
-            "match": "<time>"
+            "shortmatch": "<time>"
         }
     ]
 }

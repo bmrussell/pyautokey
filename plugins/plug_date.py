@@ -8,6 +8,7 @@ from pluginframework import factory
 class PluginDate:
      
     trigger: str
+    shortmatch: str
 
     def invoke(self)->str:
         return datetime.datetime.now().strftime('%d/%m/%Y')
