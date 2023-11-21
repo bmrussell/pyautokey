@@ -43,6 +43,7 @@ def quit(tray):
 def on_press(key):
     global typed_keys
     global listening
+    global actions
 
     key_str = str(key).replace('\'', '')
 
@@ -57,28 +58,39 @@ def on_press(key):
             print(f'candidate_keyword={candidate_keyword}.')
             if candidate_keyword != "":
                 if candidate_keyword in replacements.keys():
-                    listening = False
+                    listening = False                    
                     pyautogui.press('backspace', presses=len(candidate_keyword)+2)
                     for fragment in replacements[candidate_keyword]:
-                        try:
-                            special = keyboard.HotKey.parse(fragment)                            
-                            if fragment[0] != '<':
-                                # Not a special sequence like <enter>
-                                # Pynput parses an extended character as-is OK
-                                special = None
-                            else:
-                                # Not a special character
-                                special = fragment[1:-1]
+                        action = None
+                        special = None
+                        try:                            
+                            if fragment[0] == '<':
+                                special = keyboard.HotKey.parse(fragment)
                         except:
-                            special = None
-                            
-                        if special == None:
-                            pyperclip.copy(fragment)
+                            # Was a <name> but not a hotkey                            
+                            if fragment in actions:
+                                action = actions[fragment]
+
+                        print(f'fragment={fragment}, action={action}, special={special}')                                
+                        
+                        if action != None:
+                            # This is text replacement so
+                            # Create an instance of the action for the right plugin
+                            # And call it to get the replacement text and ^v that sucker in.
+                            plugin = factory.create(action)
+                            expansion = plugin.invoke()
+                            pyperclip.copy(expansion)
                             pyautogui.hotkey("ctrl", "v")
                             print(fragment, end='')
+                        elif special == None:
+                            # Clipboard is a work-around for 
+                            # pyautogui.typewrite not dealing with extended characters
+                            pyperclip.copy(fragment)
+                            pyautogui.hotkey("ctrl", "v")
+                            #print(fragment, end='')
                         else:
                             pyautogui.hotkey(special)
-                            print(f'[{special}]', end='')
+                            #print(f'[{special}]', end='')
                             
         else:
             typed_keys.append(key_str)
@@ -116,6 +128,7 @@ if __name__ == '__main__':
     global quit_selected
     global listener
     global plugins
+    global actions
     
     # Initialise
     datadir = os.path.join(os.getenv('APPDATA'), 'pyautokey')
@@ -151,8 +164,9 @@ if __name__ == '__main__':
     # Load Plugins
     loader.load_plugins(config_json['plugins'])
     
-    # Load the actions that do something with those plugins
-    actions = [factory.create(item) for item in config_json['actions']]
+    # Load the actions into a dictionary indexed on shortmatch
+    # that do something with those plugins
+    actions = {item["shortmatch"]: item for item in config_json["actions"]}
     
     # Initialise system tray
     systray = SysTrayIcon(iconfile, "...", menu_options=[], on_quit=quit)

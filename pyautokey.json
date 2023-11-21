@@ -17,7 +17,9 @@
         "para": "§ ",
         "facepalm": "(－‸ლ)",
         "cube": "³",
-        "square": "²"
+        "square": "²",
+        "date": "<date> ",
+        "time": "<time> "
     },
     "plugins": [
         "plugins.plug_date",
