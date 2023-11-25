@@ -19,16 +19,23 @@
         "facepalm": "(－‸ლ)",
         "cube": "³",
         "square": "²",
-        "date": "<date> "
+        "date": "<date> ",
+        "time": "<time> "
     },
     "plugins": [
-        "plugins.plug_date"
+        "plugins.plug_date",
+        "plugins.plug_time"
     ],
     "actions": [
         {
             "type": "plug_date",            
             "trigger": "replacement",
             "shortmatch": "<date>"
+        },
+        {
+            "type": "plug_time",
+            "trigger": "replacement",
+            "shortmatch": "<time>"
         }
     ]
 }

@@ -1,6 +1,6 @@
 from typing import Any, Callable
 
-from pluginframework.plugin import Plugin
+from plugin import Plugin
 
 registered_plugins: dict[str, Callable[..., Plugin]] = {}
 

@@ -20,6 +20,7 @@ The application implements a plugin architecture by placing python modules in a 
 |--|--|
 |`macro_start`|Character that will start looking for a text expansion. I use `:`
 |`macro_end`|Character that will trigger text expansion. I use space. This is defined in the config here as "Key.space" which translates directly to `pynput` hotkey parsing.
+|`segment_delay`|Delay in ms between segments of an expansion. Default is 0. e.g. if set to 500 is equivalent to "sometext<delay 500><enter><delay 500>some more text"
 |`plugins`|Defines names of plugin classes to load from the `plugins` directory. Values should be `plugins.` followed by the name of the Python file with no extension|
 |`actions`|Defines actions which will be executed by plugins. See below for action specification|
 
@@ -29,17 +30,43 @@ Actions are described key/value pairs as follows:
 |--|--|
 |`type`|The type of plugin that will execute this action|
 |`trigger`|When the action is invoked. Currently `replacement` for use during text expansion or `hotkey` for hotkeys (TODO).|
-|`match`|Used to determine when the trigger applies. Either the text that will act as the signal to call the plugin, obtain the text and use it for expansion, or the hotkey to wait on that will invoke the plugin|
+|`shortmatch`|Used to determine when the trigger applies. Either the text that will act as the signal to call the plugin, obtain the text and use it for expansion, or the hotkey to wait on that will invoke the plugin|
 
 ### SECTION `replacements`
-Multiple key, value entries of text to watch for and text it will be replaced with. Special characters that `pynput` recognises are surrounded by `<` `>` so `<enter>` for the enter key.
+Multiple key, value entries of text to watch for and text it will be replaced with. Special characters that `pynput` recognises are surrounded by `<` `>` so `<enter>` for the enter key. Special expansions are as follows:
+|Expansion|Result|
+|--|--|
+|`<delay nnn>`|Pause for `nnn` ms before continuing.|
+|`<custom>`|Triggers a text expansion plugin if it is a match for the plugins `shortmatch` value of `<custom>`.|
 
 ---
 # BUILD
 ```powershell
-pyinstaller --hidden-import pkg_resources --hidden-import infi.systray --onefile --noconsole .\pyautokey.py
+python -m nuitka --disable-console --output-dir=DIRECTORY=nuitka --onefile-tempdir-spec=C:\ProgramData\pyautokey --onefile .\pyautokey.py
 ```
 
 ---
 # REFERENCES
 * [The Power Of The Plugin Architecture In Python](https://www.youtube.com/watch?v=iCE1bDoit9Q)
+
+# HOTKEYS
+```python
+hotkeys = ['\t', '\n', '\r', 
+           'accept', 'add', 'alt', 'altleft', 'altright', 'apps', 'backspace',
+           'browserback', 'browserfavorites', 'browserforward', 'browserhome',
+           'browserrefresh', 'browsersearch', 'browserstop', 'capslock', 'clear',
+           'convert', 'ctrl', 'ctrlleft', 'ctrlright', 'decimal', 'del', 'delete',
+           'divide', 'down', 'end', 'enter', 'esc', 'escape', 'execute', 'f1', 'f10',
+           'f11', 'f12', 'f13', 'f14', 'f15', 'f16', 'f17', 'f18', 'f19', 'f2', 'f20',
+           'f21', 'f22', 'f23', 'f24', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9',
+           'final', 'fn', 'hanguel', 'hangul', 'hanja', 'help', 'home', 'insert', 'junja',
+           'kana', 'kanji', 'launchapp1', 'launchapp2', 'launchmail',
+           'launchmediaselect', 'left', 'modechange', 'multiply', 'nexttrack',
+           'nonconvert', 'num0', 'num1', 'num2', 'num3', 'num4', 'num5', 'num6',
+           'num7', 'num8', 'num9', 'numlock', 'pagedown', 'pageup', 'pause', 'pgdn',
+           'pgup', 'playpause', 'prevtrack', 'print', 'printscreen', 'prntscrn',
+           'prtsc', 'prtscr', 'return', 'right', 'scrolllock', 'select', 'separator',
+           'shift', 'shiftleft', 'shiftright', 'sleep', 'space', 'stop', 'subtract', 'tab',
+           'up', 'volumedown', 'volumemute', 'volumeup', 'win', 'winleft', 'winright', 'yen',
+           'command', 'option', 'optionleft', 'optionright']
+```

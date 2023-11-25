@@ -1,4 +1,3 @@
-import builtins
 import json
 import os
 import re
@@ -11,34 +10,17 @@ from infi.systray import SysTrayIcon
 from pynput import keyboard
 from pynput.keyboard import Key, Listener
 
-from pluginframework import factory, loader
-
-hotkeys = ['\t', '\n', '\r', 
-           'accept', 'add', 'alt', 'altleft', 'altright', 'apps', 'backspace',
-           'browserback', 'browserfavorites', 'browserforward', 'browserhome',
-           'browserrefresh', 'browsersearch', 'browserstop', 'capslock', 'clear',
-           'convert', 'ctrl', 'ctrlleft', 'ctrlright', 'decimal', 'del', 'delete',
-           'divide', 'down', 'end', 'enter', 'esc', 'escape', 'execute', 'f1', 'f10',
-           'f11', 'f12', 'f13', 'f14', 'f15', 'f16', 'f17', 'f18', 'f19', 'f2', 'f20',
-           'f21', 'f22', 'f23', 'f24', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9',
-           'final', 'fn', 'hanguel', 'hangul', 'hanja', 'help', 'home', 'insert', 'junja',
-           'kana', 'kanji', 'launchapp1', 'launchapp2', 'launchmail',
-           'launchmediaselect', 'left', 'modechange', 'multiply', 'nexttrack',
-           'nonconvert', 'num0', 'num1', 'num2', 'num3', 'num4', 'num5', 'num6',
-           'num7', 'num8', 'num9', 'numlock', 'pagedown', 'pageup', 'pause', 'pgdn',
-           'pgup', 'playpause', 'prevtrack', 'print', 'printscreen', 'prntscrn',
-           'prtsc', 'prtscr', 'return', 'right', 'scrolllock', 'select', 'separator',
-           'shift', 'shiftleft', 'shiftright', 'sleep', 'space', 'stop', 'subtract', 'tab',
-           'up', 'volumedown', 'volumemute', 'volumeup', 'win', 'winleft', 'winright', 'yen',
-           'command', 'option', 'optionleft', 'optionright']
+import factory
+import loader
 
 
 def quit(tray):
     global quit_selected
     global listener
-    
+
     quit_selected = True
     listener.stop()
+
 
 def on_press(key):
     global typed_keys
@@ -53,26 +35,26 @@ def on_press(key):
 
     if listening:
         if key_str == macro_end:
-            print(f'key_str=[{key_str}] is space == {key_str == " "}')
+            # print(f'key_str=[{key_str}] is space == {key_str == " "}')
             candidate_keyword = ''.join(typed_keys)[1:]
-            print(f'candidate_keyword={candidate_keyword}.')
+            # print(f'candidate_keyword={candidate_keyword}.')
             if candidate_keyword != "":
                 if candidate_keyword in replacements.keys():
-                    listening = False                    
+                    listening = False
                     pyautogui.press('backspace', presses=len(candidate_keyword)+2)
                     for fragment in replacements[candidate_keyword]:
                         action = None
                         special = None
-                        try:                            
+                        try:
                             if fragment[0] == '<':
                                 special = keyboard.HotKey.parse(fragment)
                         except:
-                            # Was a <name> but not a hotkey                            
+                            # Was a <name> but not a hotkey
                             if fragment in actions:
                                 action = actions[fragment]
 
-                        print(f'fragment={fragment}, action={action}, special={special}')                                
-                        
+                        # print(f'fragment={fragment}, action={action}, special={special}')
+
                         if action != None:
                             # This is text replacement so
                             # Create an instance of the action for the right plugin
@@ -81,17 +63,17 @@ def on_press(key):
                             expansion = plugin.invoke()
                             pyperclip.copy(expansion)
                             pyautogui.hotkey("ctrl", "v")
-                            print(fragment, end='')
+                            # print(fragment, end='')
                         elif special == None:
-                            # Clipboard is a work-around for 
+                            # Clipboard is a work-around for
                             # pyautogui.typewrite not dealing with extended characters
                             pyperclip.copy(fragment)
                             pyautogui.hotkey("ctrl", "v")
-                            #print(fragment, end='')
+                            # print(fragment, end='')
                         else:
                             pyautogui.hotkey(special)
-                            #print(f'[{special}]', end='')
-                            
+                            # print(f'[{special}]', end='')
+
         else:
             typed_keys.append(key_str)
 
@@ -101,7 +83,7 @@ def prep_replacements(replacements):
     Replace the replacement string with an array containing entries that are special character placeholders like <enter> with their Key enum equivalent
     e.g. Key.enter or sequences of regular characters
     """
-    # keyboard.HotKey.parse('<enter>') 
+    # keyboard.HotKey.parse('<enter>')
     pattern = re.compile(r'(<[^>]+>|[^<]+)')
     for key, value in replacements.items():
         matches = pattern.findall(value)
@@ -118,29 +100,29 @@ def prep_replacements(replacements):
                     replacement_array.append(match)
             else:
                 replacement_array.append(match)
-            
+
             replacements[key] = replacement_array
-    
+
 
 if __name__ == '__main__':
-    
+
     global systray
     global quit_selected
     global listener
-    global plugins
     global actions
-    
+
     # Initialise
     datadir = os.path.join(os.getenv('APPDATA'), 'pyautokey')
-    
+
     if not os.path.exists(datadir):
         os.makedirs(datadir)
 
-    # Get the app icon from Windows     
-    extractor = icoextract.IconExtractor('C:\\Windows\\SystemResources\\imageres.dll.mun')
-    iconfile = f'{datadir}\\pyautokey.ico'    
+    # Get the app icon from Windows
+    extractor = icoextract.IconExtractor(
+        'C:\\Windows\\SystemResources\\imageres.dll.mun')
+    iconfile = f'{datadir}\\pyautokey.ico'
     extractor.export_icon(iconfile, 173)
-    
+
     appdata_config = os.path.join(datadir, 'pyautokey.json')
     if os.path.exists('pyautokey.json'):
         config_file = 'pyautokey.json'
@@ -149,10 +131,14 @@ if __name__ == '__main__':
 
     # Read the config
     try:
+        
+        print(f'cwd = {os.getcwd()}')
+        print(f'Loading config from {config_file}...', end='')
         with open(config_file, 'r', encoding='utf-8') as json_file:
             config_json = json.load(json_file)
+        print('Done')
     except:
-        print("Could not open config file.")       
+        print("Could not open config file.")
         sys.exit(0)
 
     # Load text replacements
@@ -160,14 +146,15 @@ if __name__ == '__main__':
     macro_end = config_json['config']['macro_end']
     replacements = config_json['replacements']
     prep_replacements(replacements)
-    
+
     # Load Plugins
+    print(f"Loading plugins: {config_json['plugins']}")
     loader.load_plugins(config_json['plugins'])
-    
+
     # Load the actions into a dictionary indexed on shortmatch
     # that do something with those plugins
     actions = {item["shortmatch"]: item for item in config_json["actions"]}
-    
+
     # Initialise system tray
     systray = SysTrayIcon(iconfile, "...", menu_options=[], on_quit=quit)
     systray.start()
@@ -177,7 +164,7 @@ if __name__ == '__main__':
     typed_keys = []
     with Listener(on_press=on_press) as listener:
         listener.join()
-    
+
     # Cleanup
     systray.shutdown()
     sys.exit(0)
