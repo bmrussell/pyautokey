@@ -2,6 +2,7 @@ import json
 import os
 import re
 import sys
+import time
 
 import icoextract
 import pyautogui
@@ -45,16 +46,20 @@ def on_press(key):
                     for fragment in replacements[candidate_keyword]:
                         action = None
                         special = None
+                        delay = None
                         try:
                             if fragment[0] == '<':
                                 special = keyboard.HotKey.parse(fragment)
                         except:
                             # Was a <name> but not a hotkey
                             if fragment in actions:
+                                # is a plugin
                                 action = actions[fragment]
+                            elif len(fragment) > 7 and fragment[:7] == '<delay ':
+                                # Is a delay
+                                delay = float(fragment[7:][:-1])/1000
 
                         # print(f'fragment={fragment}, action={action}, special={special}')
-
                         if action != None:
                             # This is text replacement so
                             # Create an instance of the action for the right plugin
@@ -64,6 +69,8 @@ def on_press(key):
                             pyperclip.copy(expansion)
                             pyautogui.hotkey("ctrl", "v")
                             # print(fragment, end='')
+                        elif delay != None:
+                            time.sleep(delay)
                         elif special == None:
                             # Clipboard is a work-around for
                             # pyautogui.typewrite not dealing with extended characters
