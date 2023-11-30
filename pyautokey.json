@@ -25,11 +25,12 @@
     },
     "plugins": [
         "plugins.plug_date",
-        "plugins.plug_time"
+        "plugins.plug_time",
+        "plugins.plug_pasteupper"
     ],
     "actions": [
         {
-            "type": "plug_date",            
+            "type": "plug_date",
             "trigger": "replacement",
             "shortmatch": "<date>"
         },
@@ -37,6 +38,11 @@
             "type": "plug_time",
             "trigger": "replacement",
             "shortmatch": "<time>"
+        },
+        {
+            "type": "plug_pasteupper",
+            "trigger": "hotkey",
+            "shortmatch": "<ctrl>+<shift>+u"
         }
     ]
 }

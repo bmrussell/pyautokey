@@ -9,7 +9,6 @@ import pyautogui
 import pyperclip
 from infi.systray import SysTrayIcon
 from pynput import keyboard
-from pynput.keyboard import Key, Listener
 
 import factory
 import loader
@@ -33,15 +32,16 @@ def on_press(key):
     if key_str == macro_start:
         typed_keys = []
         listening = True
+        
 
     if listening:
         if key_str == macro_end:
-            # print(f'key_str=[{key_str}] is space == {key_str == " "}')
+            #print(f'key_str=[{key_str}] is space == {key_str == " "}')
             candidate_keyword = ''.join(typed_keys)[1:]
-            # print(f'candidate_keyword={candidate_keyword}.')
+            #print(f'candidate_keyword={candidate_keyword}.')
             if candidate_keyword != "":
                 if candidate_keyword in replacements.keys():
-                    listening = False
+                    listening = False                             
                     pyautogui.press('backspace', presses=len(candidate_keyword)+2)
                     for fragment in replacements[candidate_keyword]:
                         action = None
@@ -112,7 +112,6 @@ def prep_replacements(replacements):
 
 
 if __name__ == '__main__':
-
     global systray
     global quit_selected
     global listener
@@ -125,10 +124,14 @@ if __name__ == '__main__':
         os.makedirs(datadir)
 
     # Get the app icon from Windows
-    extractor = icoextract.IconExtractor(
-        'C:\\Windows\\SystemResources\\imageres.dll.mun')
+    extractor = icoextract.IconExtractor('C:\\Windows\\SystemResources\\imageres.dll.mun')
     iconfile = f'{datadir}\\pyautokey.ico'
     extractor.export_icon(iconfile, 173)
+
+    # Initialise system tray
+    systray = SysTrayIcon(iconfile, "...", menu_options=[], on_quit=quit)
+    systray.start()
+    
 
     appdata_config = os.path.join(datadir, 'pyautokey.json')
     if os.path.exists('pyautokey.json'):
@@ -160,18 +163,28 @@ if __name__ == '__main__':
 
     # Load the actions into a dictionary indexed on shortmatch
     # that do something with those plugins
-    actions = {item["shortmatch"]: item for item in config_json["actions"]}
-
-    # Initialise system tray
-    systray = SysTrayIcon(iconfile, "...", menu_options=[], on_quit=quit)
-    systray.start()
+    actions = {item["shortmatch"]: item for item in config_json["actions"] if item['trigger'] == 'replacement'}
+    
+    # Handle Hotkeys
+    # Create a dictionary of keys/functions for pynput
+    hotkey_listener = None
+    listen_for = {}    
+    for key, hotkey in {item["shortmatch"]: item for item in config_json["actions"] if item['trigger'] == 'hotkey'}.items():
+        plugin = factory.create(hotkey)
+        listen_for[key] = plugin.invoke
+        
+    if len(listen_for) > 0:
+        hotkey_listener = keyboard.GlobalHotKeys(listen_for)
+        hotkey_listener.start()    
 
     # Start the listener: blocking. Use .start() for non blocking
     listening = True
     typed_keys = []
-    with Listener(on_press=on_press) as listener:
+    with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
-
+    
     # Cleanup
+    if hotkey_listener != None:
+        hotkey_listener.stop()
     systray.shutdown()
     sys.exit(0)
