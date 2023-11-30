@@ -9,6 +9,7 @@ Small project to replace the functions I commonly use Autohotkey for. Incorporat
 
 - Static text replacement.
 - System tray icon. Right click and choose Quit to exit.
+- Hotkeys. Trigger a Python function on hotkey press like `ctrl+shift+u`
 
 ## CONFIGURATION FILE
 JSON configuration file `pyautokey.json` in the current directory or `%APPDATA%\pyautokey`. File should be UTF-8 encoded. Contents as follows:
@@ -29,7 +30,7 @@ Actions are described key/value pairs as follows:
 |Key|Value|
 |--|--|
 |`type`|The type of plugin that will execute this action|
-|`trigger`|When the action is invoked. Currently `replacement` for use during text expansion or `hotkey` for hotkeys (TODO).|
+|`trigger`|When the action is invoked. Currently `replacement` for use during text expansion or `hotkey` for hotkeys.|
 |`shortmatch`|Used to determine when the trigger applies. Either the text that will act as the signal to call the plugin, obtain the text and use it for expansion, or the hotkey to wait on that will invoke the plugin|
 
 ### SECTION `replacements`
@@ -50,6 +51,7 @@ python -m nuitka --disable-console --output-dir=DIRECTORY=nuitka --onefile-tempd
 * [The Power Of The Plugin Architecture In Python](https://www.youtube.com/watch?v=iCE1bDoit9Q)
 
 # HOTKEYS
+List of hotkeys `pynput` understands
 ```python
 hotkeys = ['\t', '\n', '\r', 
            'accept', 'add', 'alt', 'altleft', 'altright', 'apps', 'backspace',
