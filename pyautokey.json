@@ -21,12 +21,14 @@
         "square": "²",
         "date": "<date> ",
         "time": "<time> ",
-        "now": "<date><delay 2000><time> "
+        "now": "<date><delay 2000><time> ",
+        "lorem": "<lorem>"
     },
     "plugins": [
         "plugins.plug_date",
         "plugins.plug_time",
-        "plugins.plug_pasteupper"
+        "plugins.plug_pasteupper",
+        "plugins.plug_lorem"
     ],
     "actions": [
         {
@@ -43,6 +45,11 @@
             "type": "plug_pasteupper",
             "trigger": "hotkey",
             "shortmatch": "<ctrl>+<shift>+u"
+        },
+        {
+            "type": "plug_lorem",
+            "trigger": "replacement",
+            "shortmatch": "<lorem>"
         }
     ]
 }
