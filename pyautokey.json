@@ -29,6 +29,7 @@
         "plugins.plug_time",
         "plugins.plug_pasteupper",
         "plugins.plug_pastelower",
+        "plugins.plug_pastetitle",
         "plugins.plug_lorem"
     ],
     "actions": [
@@ -51,6 +52,11 @@
             "type": "plug_pastelower",
             "trigger": "hotkey",
             "shortmatch": "<ctrl>+<shift>+l"
+        },
+        {
+            "type": "plug_pastetitle",
+            "trigger": "hotkey",
+            "shortmatch": "<ctrl>+<shift>+k"
         },
         {
             "type": "plug_lorem",
