@@ -164,7 +164,7 @@ if __name__ == '__main__':
     # Load the actions into a dictionary indexed on shortmatch
     # that do something with those plugins
     actions = {item["shortmatch"]: item for item in config_json["actions"] if item['trigger'] == 'replacement'}
-    
+        
     # Handle Hotkeys
     # Create a dictionary of keys/functions for pynput
     hotkey_listener = None
@@ -177,7 +177,12 @@ if __name__ == '__main__':
         hotkey_listener = keyboard.GlobalHotKeys(listen_for)
         hotkey_listener.start()    
 
-    # Start the listener: blocking. Use .start() for non blocking
+    # Load the asynchronous plugins that we'll call with asyncio.
+    for key, hotkey in {item["shortmatch"]: item for item in config_json["actions"] if item['trigger'] == 'async'}.items():
+        plugin = factory.create(hotkey)        
+        plugin.invoke()
+
+    # Start the text expansion listener: blocking.
     listening = True
     typed_keys = []
     with keyboard.Listener(on_press=on_press) as listener:
@@ -186,5 +191,7 @@ if __name__ == '__main__':
     # Cleanup
     if hotkey_listener != None:
         hotkey_listener.stop()
+        
     systray.shutdown()
     sys.exit(0)
+

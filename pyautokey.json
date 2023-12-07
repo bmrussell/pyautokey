@@ -30,6 +30,7 @@
         "plugins.plug_pasteupper",
         "plugins.plug_pastelower",
         "plugins.plug_pastetitle",
+        "plugins.plug_uatu",
         "plugins.plug_lorem"
     ],
     "actions": [
@@ -62,6 +63,11 @@
             "type": "plug_lorem",
             "trigger": "replacement",
             "shortmatch": "<lorem>"
+        },
+        {
+            "type": "plug_uatu",
+            "trigger": "async",
+            "shortmatch": "c:\\temp\\test.txt"
         }
     ]
 }
