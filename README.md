@@ -32,6 +32,10 @@ Actions are described key/value pairs as follows:
 |`type`|The type of plugin that will execute this action|
 |`trigger`|When the action is invoked. Currently `replacement` for use during text expansion or `hotkey` for hotkeys.|
 |`shortmatch`|Used to determine when the trigger applies. Either the text that will act as the signal to call the plugin, obtain the text and use it for expansion, or the hotkey to wait on that will invoke the plugin|
+|`async`|The invoke function for this plugin will be called once from the main function of the application and is expected to return immediately. Use for asynchronous processing done on its own thread. See `plug_uatu.py` for an example that keeps watch for a file every 10s and deletes it if present|
+
+##### PLUGIN DEPENDENCIES
+The current build script adds libraries used by the current set of plugins. Need to find a better solution than baking these in at build time.
 
 ### SECTION `replacements`
 Multiple key, value entries of text to watch for and text it will be replaced with. Special characters that `pynput` recognises are surrounded by `<` `>` so `<enter>` for the enter key. Special expansions are as follows:
@@ -43,7 +47,7 @@ Multiple key, value entries of text to watch for and text it will be replaced wi
 ---
 # BUILD
 ```powershell
-python -m nuitka --disable-console --output-dir=DIRECTORY=nuitka --onefile-tempdir-spec=C:\ProgramData\pyautokey --onefile .\pyautokey.py
+./build.ps1
 ```
 
 ---

@@ -1,6 +1,10 @@
-# One file
-#python -m nuitka --disable-console --output-dir=.build --onefile-tempdir-spec=C:\ProgramData\pyautokey --onefile .\pyautokey.py
-python -m nuitka --disable-console --output-dir=.build --standalone --onefile pyautokey.py
+param([switch]$Console)
+$noconsole = "--disable-console"
+if ($Console.IsPresent) {
+    $noconsole = ""
+}
+python -m nuitka --output-dir=.build $noconsole --include-package=pyclip,requests,dotenv --standalone --onefile pyautokey.py
+
 
 # Directory
 #python -m nuitka --output-dir=.build --onefile .\pyautokey.py
