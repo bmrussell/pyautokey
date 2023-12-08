@@ -13,7 +13,6 @@ from pynput import keyboard
 import factory
 import loader
 
-# Catch these special "hotkeys" which translate to normal characters to be typed
 special_chars_to_be_typed = {
     "<tab>": "\t"
     ,"<enter>": "\n"
@@ -69,18 +68,18 @@ def on_press(key):
                         if action != None:
                             # This is text replacement so
                             # Create an instance of the action for the right plugin
-                            # And call it to get the replacement text and ^v that sucker in.
+                            # And call it to get the replacement text type it
                             plugin = factory.create(action)
                             expansion = plugin.invoke()
-                            pyperclip.copy(expansion)
-                            pyautogui.hotkey("ctrl", "v")
+                            pyautogui.typewrite(expansion)
+                            # pyperclip.copy(expansion)
+                            # pyautogui.hotkey("ctrl", "v")
                             # print(fragment, end='')
                         elif delay != None:
                             time.sleep(delay)
                         elif fragment in special_chars_to_be_typed:
-                            pyperclip.copy(special_chars_to_be_typed[fragment])
-                            pyautogui.hotkey("ctrl", "v")
-                        elif special == None or fragment in special_chars_to_be_typed:
+                            pyautogui.typewrite(special_chars_to_be_typed[fragment])
+                        elif special == None:
                             # Clipboard is a work-around for
                             # pyautogui.typewrite not dealing with extended characters
                             pyperclip.copy(fragment)
@@ -203,3 +202,4 @@ if __name__ == '__main__':
         
     systray.shutdown()
     sys.exit(0)
+
