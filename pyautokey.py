@@ -82,8 +82,10 @@ def on_press(key):
                         elif special == None:
                             # Clipboard is a work-around for
                             # pyautogui.typewrite not dealing with extended characters
+                            oldClipboard = pyperclip.paste()
                             pyperclip.copy(fragment)
                             pyautogui.hotkey("ctrl", "v")
+                            pyperclip.copy(oldClipboard)
                             # print(fragment, end='')
                         else:
                             pyautogui.hotkey(special)
