@@ -1,0 +1,1 @@
+sonar-scanner.bat -D"sonar.projectKey=pyautokey" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9001" -D"sonar.login=sqp_8b6abcbc62c74a2ad36db2f38b46b64b2985ba93"

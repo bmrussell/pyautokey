@@ -15,6 +15,8 @@
         "fire": "🔥 ",
         "clock": "🕙 ",
         "email": "📧 ",
+		"pin": "📌 ",
+		"bulb": "💡 ",
         "para": "§ ",
         "facepalm": "(－‸ლ)",
         "cube": "³",
@@ -22,7 +24,13 @@
         "date": "<date> ",
         "time": "<time> ",
         "now": "<date><delay 2000><time> ",
-        "lorem": "<lorem>"
+        "lorem": "<lorem>",
+		"pfa": "Please find attached ",
+		"me": "Brian Russell",
+		"mail": "email@domain.com",
+        "q": "❓ ",
+		"tel": "+44 111 222 333",
+		"quote": "<quote>"
     },
     "plugins": [
         "plugins.plug_date",
@@ -31,7 +39,10 @@
         "plugins.plug_pastelower",
         "plugins.plug_pastetitle",
         "plugins.plug_uatu",
-        "plugins.plug_lorem"
+        "plugins.plug_lorem",
+		"plugins.plug_quote",
+        "plugins.plug_uatu",
+        "plugins.plug_pasteonenote"
     ],
     "actions": [
         {
@@ -59,15 +70,25 @@
             "trigger": "hotkey",
             "shortmatch": "<ctrl>+<shift>+k"
         },
+		{
+			"type": "plug_pasteonenote",
+			"trigger": "hotkey",
+			"shortmatch": "<ctrl>+<shift>+o"
+		},
         {
             "type": "plug_lorem",
             "trigger": "replacement",
             "shortmatch": "<lorem>"
         },
+		{
+			"type": "plug_quote",
+			"trigger": "replacement",
+			"shortmatch": "<quote>"
+		},
         {
             "type": "plug_uatu",
             "trigger": "async",
-            "shortmatch": "c:\\temp\\test.txt"
+            "shortmatch": "C:\\path\\file to watch.txt"
         }
     ]
 }

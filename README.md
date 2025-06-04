@@ -49,6 +49,16 @@ Multiple key, value entries of text to watch for and text it will be replaced wi
 ```powershell
 ./build.ps1
 ```
+## OPTIONAL
+
+Build Wheels for machines without C compiler:
+```powershell
+pip wheel -r ./requirements.txt -w "./wheels"
+```
+and deploy with
+```powershell
+pip install --no-index --find-links .\wheels -r .\requirements.txt
+```
 
 ---
 # REFERENCES
