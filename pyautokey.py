@@ -128,7 +128,7 @@ if __name__ == '__main__':
     global actions
 
     # Initialise
-    datadir = os.path.join(os.getenv('APPDATA'), 'pyautokey')
+    datadir = os.path.join(os.getenv('APPDATA', ''), 'pyautokey')
 
     if not os.path.exists(datadir):
         os.makedirs(datadir)
@@ -188,8 +188,8 @@ if __name__ == '__main__':
         hotkey_listener.start()    
 
     # Load the asynchronous plugins that we'll call with asyncio.
-    for key, hotkey in {item["shortmatch"]: item for item in config_json["actions"] if item['trigger'] == 'async'}.items():
-        plugin = factory.create(hotkey)        
+    for key, hotkey in {item["type"]: item for item in config_json["actions"] if item['trigger'] == 'async'}.items():
+        plugin = factory.create(hotkey)
         plugin.invoke()
 
     # Start the text expansion listener: blocking.

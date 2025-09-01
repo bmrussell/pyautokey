@@ -42,7 +42,8 @@
         "plugins.plug_lorem",
 		"plugins.plug_quote",
         "plugins.plug_uatu",
-        "plugins.plug_pasteonenote"
+        "plugins.plug_pasteonenote",
+        "plugins.plug_borderlessmaximise"
     ],
     "actions": [
         {
@@ -86,9 +87,9 @@
 			"shortmatch": "<quote>"
 		},
         {
-            "type": "plug_uatu",
+            "type": "plug_borderlessmaximise",
             "trigger": "async",
-            "shortmatch": "C:\\path\\file to watch.txt"
+            "windowtitle": "Notepad++"
         }
     ]
 }
