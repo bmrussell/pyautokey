@@ -170,7 +170,7 @@ if __name__ == '__main__':
     # Load Plugins
     print(f"Loading plugins: {config_json['plugins']}")
     loader.load_plugins(config_json['plugins'])
-
+    systray.update(hover_text=f"Plugins:\n{chr(10).join(factory.registered_plugins.keys())}".replace('plug_',''))
     # Load the actions into a dictionary indexed on shortmatch
     # that do something with those plugins
     actions = {item["shortmatch"]: item for item in config_json["actions"] if item['trigger'] == 'replacement'}
