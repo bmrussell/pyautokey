@@ -71,10 +71,8 @@ def on_press(key):
                             # And call it to get the replacement text type it
                             plugin = factory.create(action)
                             expansion = plugin.invoke()
-                            pyautogui.typewrite(expansion)
-                            # pyperclip.copy(expansion)
-                            # pyautogui.hotkey("ctrl", "v")
-                            # print(fragment, end='')
+                            if expansion != None:
+                                pyautogui.typewrite(expansion)
                         elif delay != None:
                             time.sleep(delay)
                         elif fragment in special_chars_to_be_typed:
@@ -85,11 +83,9 @@ def on_press(key):
                             oldClipboard = pyperclip.paste()
                             pyperclip.copy(fragment)
                             pyautogui.hotkey("ctrl", "v")
-                            pyperclip.copy(oldClipboard)
-                            # print(fragment, end='')
+                            pyperclip.copy(oldClipboard)                            
                         else:
                             pyautogui.hotkey(special)
-                            # print(f'[{special}]', end='')
 
         else:
             typed_keys.append(key_str)
