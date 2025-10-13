@@ -1,5 +1,6 @@
 import time
 from dataclasses import dataclass
+from typing import Optional
 
 import pyautogui
 import pyclip
@@ -28,13 +29,15 @@ class PasteTitle:
             except:
                 pass 
         
-    def invoke(self)->str:        
+    def invoke(self)->Optional[str]:        
         # Make sure the hotkeys are released
-        for key_in_sequence in self.shortmatch_arr:
-            keyboard.release(key_in_sequence)
-        
-        # Copy, trim then paste           
-        clipboard_text = pyclip.paste().decode('UTF-8')
+        for key_in_sequence in self.shortmatch_arr:            
+            key_in_sequence.release()
+            
+        # Copy, trim then paste
+        clipboard_bytes = pyclip.paste(as_bytes=True)
+        clipboard_text = str(clipboard_bytes.decode('utf-8')) if isinstance(clipboard_bytes, bytes) else str(clipboard_bytes)
+            
         url = clipboard_text.split('\n')
         if len(url) == 2 and url[1].startswith("onenote:"):
             pyautogui.PAUSE = 0.1

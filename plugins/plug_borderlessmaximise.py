@@ -5,6 +5,7 @@ import re
 import threading
 import time
 from dataclasses import dataclass
+from typing import Optional
 
 import pyautogui
 import pyclip
@@ -100,7 +101,7 @@ class BorderlessMaximise:
         #   hotkey sequence for use when invoked
         self.windowtitle = windowtitle
         
-    def invoke(self)->str:
+    def invoke(self)->Optional[str]:
         start_background_loop()
         fire_and_forget(watch_for_window(self.windowtitle))        
         return None

@@ -1,13 +1,14 @@
 import json
 import os
 from dataclasses import dataclass
- 
+from typing import Optional
+
 import requests
 from dotenv import load_dotenv
- 
+
 import factory
- 
- 
+
+
 @dataclass
 class PluginQuote:
     """Demonstrates calling a web API and returning the text as the value for insert"""
@@ -15,7 +16,7 @@ class PluginQuote:
     trigger: str
     shortmatch: str
  
-    def invoke(self)->str:
+    def invoke(self)->Optional[str]:
         try:
             load_dotenv()
             api_key = os.getenv('API_NINJA_KEY')

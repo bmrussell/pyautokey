@@ -1,8 +1,8 @@
-from typing import Protocol
+from typing import Optional, Protocol
 
 
 class Plugin(Protocol):
     """Basic protocol interface"""
     
-    def invoke(self) -> str:
+    def invoke(self) -> Optional[str]:
         pass

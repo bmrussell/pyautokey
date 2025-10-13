@@ -5,6 +5,7 @@ import os.path
 import threading
 import time
 from dataclasses import dataclass
+from typing import Optional
 
 import factory
 
@@ -28,11 +29,11 @@ class PluginUatu:
         pass
     
     @fire_and_forget
-    def invoke(self)->str:
+    def invoke(self)->Optional[str]:
         while True:
-            while not os.path.exists(watchingFor):
+            while watchingFor is not None and not os.path.exists(watchingFor):
                 time.sleep(10)
-            if os.path.isfile(watchingFor):
+            if watchingFor is not None and os.path.isfile(watchingFor):
                 os.remove(watchingFor)
                 
 def register() -> None:

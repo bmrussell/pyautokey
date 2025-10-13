@@ -1,5 +1,6 @@
 import time
 from dataclasses import dataclass
+from typing import Optional
 
 import pyautogui
 import pyclip
@@ -28,7 +29,7 @@ class PasteLower:
             except:
                 pass 
         
-    def invoke(self)->str:        
+    def invoke(self)->Optional[str]:       
         # Make sure the hotkeys are released
         for key_in_sequence in self.shortmatch_arr:
             keyboard.release(key_in_sequence)

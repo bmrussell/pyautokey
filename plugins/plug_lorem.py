@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 from dataclasses import dataclass
+from typing import Optional
 
 import requests
 from dotenv import load_dotenv
@@ -28,5 +29,5 @@ class PluginLorem:
         except Exception as ex:
             return f"Failed: {str(ex)}"
     
-def register() -> None:
+def register()->Optional[str]:
     factory.register("plug_lorem", PluginLorem)

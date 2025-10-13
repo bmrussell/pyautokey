@@ -8,13 +8,14 @@ darr
 icoextract
 idna
 infi.systray
+keyboard
 MouseInfo
 Nuitka
 numpy
 ordered-set
 packaging
 pefile
-Pillow
+pillow
 psutil
 PyAutoGUI
 pycaw
@@ -33,6 +34,7 @@ pytweening
 pywin32
 pywin32-ctypes
 requests
+setuptools
 six
 soundfile
 urllib3
