@@ -90,6 +90,11 @@
             "type": "plug_borderlessmaximise",
             "trigger": "async",
             "windowtitle": "Notepad++"
+        },
+        {
+            "type": "plug_navpane",
+            "trigger": "hotkey",
+            "shortmatch": "<f7>"
         }
     ]
 }
