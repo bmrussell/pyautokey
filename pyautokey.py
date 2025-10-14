@@ -134,11 +134,6 @@ if __name__ == '__main__':
     iconfile = f'{datadir}\\pyautokey.ico'
     extractor.export_icon(iconfile, 173)
 
-    # Initialise system tray
-    systray = SysTrayIcon(iconfile, "...", menu_options=[], on_quit=quit)
-    systray.start()
-    
-
     appdata_config = os.path.join(datadir, 'pyautokey.json')
     if os.path.exists('pyautokey.json'):
         config_file = 'pyautokey.json'
@@ -163,13 +158,28 @@ if __name__ == '__main__':
     replacements = config_json['replacements']
     prep_replacements(replacements)
 
+
+
     # Load Plugins
     print(f"Loading plugins: {config_json['plugins']}")
     loader.load_plugins(config_json['plugins'])
-    systray.update(hover_text=f"Plugins:\n{chr(10).join(factory.registered_plugins.keys())}".replace('plug_',''))
+
     # Load the actions into a dictionary indexed on shortmatch
     # that do something with those plugins
     actions = {item["shortmatch"]: item for item in config_json["actions"] if item['trigger'] == 'replacement'}
+    
+    # Load the menu entries
+    menu_entries = actions = {item["shortmatch"]: item for item in config_json["actions"] if item['trigger'] == 'menu'}
+    menu_options = ()
+    for key, menuitem in menu_entries.items():
+        plugin = factory.create(menuitem)
+        menu_options = menu_options + ((menuitem['shortmatch'], None, plugin.invoke),)
+        
+        
+    # Initialise system tray
+    systray = SysTrayIcon(iconfile, "...", menu_options=menu_options, on_quit=quit)
+    systray.start()
+    systray.update(hover_text=f"Plugins:\n{chr(10).join(factory.registered_plugins.keys())}".replace('plug_',''))
         
     # Handle Hotkeys
     # Create a dictionary of keys/functions for pynput
