@@ -95,6 +95,11 @@
             "type": "plug_navpane",
             "trigger": "hotkey",
             "shortmatch": "<f7>"
+        },
+        {
+            "type": "plug_typeinto",
+            "trigger": "menu",
+            "shortmatch": "Type Into..."
         }
     ]
 }
