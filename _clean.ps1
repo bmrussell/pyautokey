@@ -1,3 +1,3 @@
-Remove-Item -Recurse ./pyautokey.build
-Remove-Item -Recurse ./pyautokey.onefile-build
+Remove-Item -Recurse ./build
+Remove-Item -Recurse ./dist
 Remove-Item ./pyautokey.exe

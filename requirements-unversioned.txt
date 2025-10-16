@@ -10,7 +10,6 @@ idna
 infi.systray
 keyboard
 MouseInfo
-Nuitka
 numpy
 ordered-set
 packaging
