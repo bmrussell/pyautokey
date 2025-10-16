@@ -169,7 +169,7 @@ if __name__ == '__main__':
     actions = {item["shortmatch"]: item for item in config_json["actions"] if item['trigger'] == 'replacement'}
     
     # Load the menu entries
-    menu_entries = actions = {item["shortmatch"]: item for item in config_json["actions"] if item['trigger'] == 'menu'}
+    menu_entries = {item["shortmatch"]: item for item in config_json["actions"] if item['trigger'] == 'menu'}
     menu_options = ()
     for key, menuitem in menu_entries.items():
         plugin = factory.create(menuitem)
