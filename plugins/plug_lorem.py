@@ -17,8 +17,8 @@ class PluginLorem:
     trigger: str
     shortmatch: str
 
-    def invoke(self)->str:
-        try:
+    def invoke(self)->Optional[str]:
+        try:            
             load_dotenv()
             api_key = os.getenv('API_NINJA_KEY')
             api_url = 'https://api.api-ninjas.com/v1/loremipsum?paragraphs={}'.format(1)
