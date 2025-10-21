@@ -33,7 +33,7 @@ class TypeInto:
     def __init__(self, trigger, shortmatch):
         pass
         
-    def invoke(self, **kwargs)->Optional[str]:
+    def invoke(self, sysTrayIcon)->Optional[str]:
         time.sleep(0.5)  # Let the menu interaction finish
         initial_window = gw.getActiveWindow()
         print("Monitoring for window change...")
