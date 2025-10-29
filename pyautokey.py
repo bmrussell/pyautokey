@@ -177,9 +177,26 @@ if __name__ == '__main__':
         
         
     # Initialise system tray
-    systray = SysTrayIcon(iconfile, "...", menu_options=menu_options, on_quit=quit)
+    ##################################
+    # Build the initial result from actions with trigger == "hotkey"
+    result_dict = {
+        action['type'].removeprefix('plug_'): action['shortmatch']
+        for action in config_json["actions"]
+        if action.get("trigger") == "hotkey"
+    }
+    
+    # Overruns max length of tooltip
+    # for key in factory.registered_plugins.keys():
+    #     stripped_key = key.removeprefix("plug_")
+    #     result_dict.setdefault(stripped_key, "")
+    
+    plugin_list = "\n".join(f"{key} {value}" for key, value in result_dict.items())
+    
+
+    ##################################
+    systray = SysTrayIcon(iconfile, plugin_list, menu_options=menu_options, on_quit=quit)
     systray.start()
-    systray.update(hover_text=f"Plugins:\n{chr(10).join(factory.registered_plugins.keys())}".replace('plug_',''))
+    
         
     # Handle Hotkeys
     # Create a dictionary of keys/functions for pynput
@@ -191,7 +208,7 @@ if __name__ == '__main__':
         
     if len(listen_for) > 0:
         hotkey_listener = keyboard.GlobalHotKeys(listen_for)
-        hotkey_listener.start()    
+        hotkey_listener.start()
 
     # Load the asynchronous plugins that we'll call with asyncio.
     for key, hotkey in {item["type"]: item for item in config_json["actions"] if item['trigger'] == 'async'}.items():
