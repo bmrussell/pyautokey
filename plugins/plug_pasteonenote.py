@@ -35,7 +35,7 @@ class PasteTitle:
             key_in_sequence.release()
             
         # Copy, trim then paste
-        clipboard_bytes = pyclip.paste(as_bytes=True)
+        clipboard_bytes = pyclip.paste()
         clipboard_text = str(clipboard_bytes.decode('utf-8')) if isinstance(clipboard_bytes, bytes) else str(clipboard_bytes)
             
         url = clipboard_text.split('\n')
