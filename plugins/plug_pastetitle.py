@@ -29,7 +29,7 @@ class PasteTitle:
             except:
                 pass 
         
-    def invoke(self)->Optional[str]:        
+    def invoke(self, **kwargs)->Optional[str]:        
         # Make sure the hotkeys are released
         for key_in_sequence in self.shortmatch_arr:
             keyboard.release(key_in_sequence)

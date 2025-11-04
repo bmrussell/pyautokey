@@ -52,4 +52,5 @@ class TypeInto:
         return None
     
 def register() -> None:
+    # TODO: Resolve (probably by indirecting menu entries)
     factory.register("plug_typeinto", TypeInto)

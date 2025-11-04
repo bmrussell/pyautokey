@@ -70,7 +70,7 @@ def on_press(key):
                             # Create an instance of the action for the right plugin
                             # And call it to get the replacement text type it
                             plugin = factory.create(action)
-                            expansion = plugin.invoke()
+                            expansion = plugin.invoke(action=action)
                             if expansion != None:
                                 pyautogui.typewrite(expansion)
                         elif delay != None:

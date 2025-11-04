@@ -17,7 +17,7 @@ class PluginLorem:
     trigger: str
     shortmatch: str
 
-    def invoke(self)->Optional[str]:
+    def invoke(self, **kwargs)->Optional[str]:
         try:            
             load_dotenv()
             api_key = os.getenv('API_NINJA_KEY')

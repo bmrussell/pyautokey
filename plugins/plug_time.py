@@ -11,7 +11,7 @@ class PluginTime:
     trigger: str
     shortmatch: str
 
-    def invoke(self)->Optional[str]:
+    def invoke(self, **kwargs)->Optional[str]:
         return datetime.datetime.now().strftime('%H:%M')
     
 def register() -> None:

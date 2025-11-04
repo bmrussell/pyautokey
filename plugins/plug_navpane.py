@@ -33,7 +33,7 @@ class NavPane:
             except:
                 pass 
         
-    def invoke(self)->Optional[str]:
+    def invoke(self, **kwargs)->Optional[str]:
 
         if is_file_explorer_active():
             for key_in_sequence in self.shortmatch_arr:            

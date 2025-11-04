@@ -29,7 +29,7 @@ class PluginUatu:
         pass
     
     @fire_and_forget
-    def invoke(self)->Optional[str]:
+    def invoke(self, **kwargs)->Optional[str]:
         while True:
             while watchingFor is not None and not os.path.exists(watchingFor):
                 time.sleep(10)
