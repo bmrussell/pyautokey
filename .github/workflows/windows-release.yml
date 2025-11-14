@@ -1,5 +1,9 @@
 name: Windows Release
 
+# Grant the workflow permission to create releases / upload assets
+permissions:
+  contents: write
+
 on:
   push:
     tags:
